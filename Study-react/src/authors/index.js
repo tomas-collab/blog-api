@@ -146,7 +146,7 @@ router.put('/:id', async(req,res,next)=>{
         res.send(500).send({message:error.message})
     }
 })
-router.put('/:id/avatar',parseFile.single("avatar"),uploadFile, async(req,res,next)=>{
+router.put('/:id/avatar',parseFile.single("avatar"), async(req,res,next)=>{
     try {
         const fileAsBuffer = fs.readFileSync(authorsFilePath)
         const fileAsString = fileAsBuffer.toString()
@@ -166,13 +166,14 @@ router.put('/:id/avatar',parseFile.single("avatar"),uploadFile, async(req,res,ne
 
         const changedAuthor = {
             ...previousAuthorData,
-            avatar:req.file, 
+            avatar:req.file.path, 
             updatedAt:new Date(),
             id:req.params.id  
         }
         fileAsJSONArray[authorINDEX] = changedAuthor
 
         fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray))
+       
         res.send(changedAuthor)
     } catch (error) {
         res.send(500).send({message:error.message})
